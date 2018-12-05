@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:success] = "Account Created successfully, Please check your email for Verification"
     else
-      flash[:error] = "Invalid Credentials"
+      flash[:error] = "An Account has been registered with this email ID, please try again!"
     end
     redirect_to :login
   end
@@ -44,6 +44,25 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_admin
+    if !User.is_admin session[:user_id]
+      flash[:warning] = "Nice Try"
+      redirect_to users_path
+    end
+    user_list = User.where("email=?",params[:email])
+    if user_list.length == 0
+      flash[:error] = "User does not exist, ask him/her to register"
+      redirect_to admin_path
+    end
+    user = user_list[0]
+    if params[:func]=="add"
+      update = user.update_column(:admin,true)
+    elsif params[:func]=="remove"
+      update = user.update_column(:admin,false)
+    end
+    redirect_to admin_path
+  end
+
   def logout
     session.clear
     render :login
@@ -58,7 +77,10 @@ class UsersController < ApplicationController
       end
       flash[:success] = "Welcome"
       session[:user_id] = authorized_user.id
-      redirect_to users_path
+      if authorized_user.admin
+        redirect_to admin_path and return
+      end
+      redirect_to users_path and return
     else
       flash[:notice] = "Invalid Username or Password"
       render :login
@@ -66,14 +88,14 @@ class UsersController < ApplicationController
   end
 
   def mail_confirm
-    user = User.find_by(confirm_code: params[:conf])
-    if user == nil
+    user = User.where("confirm_code=?", params[:conf])
+    if user.length != 1
       flash[:notice] = "Sorry that link has expired!"
-      redirect_to landing_path
-    elsif !user.confirm_code
+      redirect_to root_path and return
+    elsif !user[0].confirm_code
       redirect_to login_path
     else
-      if user.set_confirm
+      if user[0].set_confirm
         flash[:success] = "Account successfully activated, Please login!"
       else
         flash[:error] = "There appears to be a problem, please email advisor"

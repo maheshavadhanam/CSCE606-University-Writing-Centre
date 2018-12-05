@@ -16,7 +16,10 @@ $(document).ready(function(){
 });
   $('#timer_stop').click(function() {
     console.log(JSON.stringify($(".timer").countimer('current')['displayedMode']['unformatted']));
-      $('#task_timer_val').val(JSON.stringify($(".timer").countimer('current')['displayedMode']['unformatted']))
+      var time = $(".timer").countimer('current')['displayedMode']['unformatted'];
+      $('#task_hour').val(time['hours'])
+      $('#task_min').val(time['minutes'])
+      $('#task_sec').val(time['seconds'])
       $('.timer').html("00:00:00")
   });
 });

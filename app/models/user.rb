@@ -7,7 +7,7 @@ class User < ApplicationRecord
 	validates_length_of :password, :in => 6..20, :on => :create
 
 	def self.is_admin(id)
-		"kumargsowmya@gmail.com" == User.find(id).email
+		User.find(id).admin
 	end
 
 	def encrypt_password

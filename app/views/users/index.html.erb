@@ -50,8 +50,9 @@
     <div class="row" style="margin-top:8px;">
           <div class="well">
             <%= link_to task.title , user_task_path(@user,task), {:id=>"task",:method=> "get"}%>
-            <%= link_to "Delete", user_task_path(@user,task) , {:class=> "btn btn-danger", :method=> :delete, :style=> 'float:right;'}%>
-            <span class="btn btn-info" style="float:right;margin-right:10px;"> <%= (task.current_value*100)/task.target_value%>% Completed</span>
+            <%= link_to "Delete", user_task_path(@user,task) , {:class=> "btn btn-danger", :method=> :delete, :style=> 'float:right;', :data => {:confirm => "Are you sure"}}%>
+            <% @percent = (task.current_value*100)/task.target_value%>
+            <span class="btn btn-info" style="float:right;margin-right:10px;"> <%= if @percent>100; 100; else; @percent; end;%>% Completed</span>
             <% if (task.target_date - Time.now) < 0%>
             <span class='btn btn-danger' style='float:right;margin-right:10px;'> Deadline Passed </span>
             <%end%>

@@ -38,7 +38,7 @@
             <div class="progress2-value">
           <div>
             <%=  if @percent>100; 100; else; @percent; end; %>%<br>
-            <span>completed</span>
+            <span><strong><%= @task.measure%></strong> Completed</span>
           </div>
         </div>
         </div>
@@ -98,19 +98,46 @@
           </div>
         </div>
       </div>
+      <hr>
+      <div class="row">
+        <div class="container">
+          <div class="text-center">
+            <label>View Progress</label>
+          </div>
+          <%= line_chart @times, {curve: true, ytitle: "Minutes", xtitle: "Date"}%>
+        </div>
+      </div>
+      <br><br>
+      <hr>
       <div class="row">
         <div class="col-md-12">
           <div class="float-center text-center" style="margin-top:7%">
                     <%= form_tag update_user_task_path(@user,@task), method: "post" do%>
-                    <%= label :task, :current_value, "Update Progress: "%>
-                    <%= text_field :task, :current_value, value: @task.current_value%>
-                    <%= hidden_field :task, :timer_val, value: '{"hours":0, "seconds":0, "minutes":0}'%>
-                    <%= submit_tag "Update" , {:class=> 'btn btn-info'}%>
+                    <div class="row">
+                      <div class="col-md-2 text-center">
+                        <%= label :task, :current_value, "Update Progress: "%>
+                      </div>
+                      <div class="col-md-4 text-center">
+                        <%= text_field :task, :current_value, value: @task.current_value%>
+                      </div>
+                      <div class="col-md-6  text-center">
+                        <%= text_field :task, :hour, {value: 0, size: 2}%>
+                        <small>Hours</small>:
+                        <%= text_field :task, :min, {value: 0, size: 2}%>
+                        <small>Minutes</small>:
+                        <%= text_field :task, :sec, {value: 0, size: 2}%>
+                        <small>Seconds</small>
+                      </div>
+                    </div>
+                    <div class="row col-md-12 text-center" style="padding-top:5%;">
+                      <%= submit_tag "Update" , {:class=> 'btn btn-info'}%>
+                    </div>
                     <%end%>
           </div>
         </div>
 
       </div>
+      <hr>
       <br><br><br><br><br>
       <div class="row">
         <div class="col-md-4 text-center">
@@ -120,7 +147,7 @@
           <%= link_to "Edit", edit_user_task_path(@user,@task) , {:class=>'btn btn-warning'}%>
         </div>
         <div class="col-md-4 text-center">
-          <%= link_to "Delete", user_task_path(@user,@task), {:class=>'btn btn-danger', :method=> :delete }%>
+          <%= link_to "Delete", user_task_path(@user,@task), {:class=>'btn btn-danger', :method=> :delete, :data => {:confirm => "Are you sure"} }%>
         </div>
       </div></div>
   </body>

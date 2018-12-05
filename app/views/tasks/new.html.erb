@@ -20,8 +20,11 @@
               <%= f.radio_button :email, false, label: "No" %>
             <% end %>
             <%= f.text_area :desc , label: "Description: "%>
-            <div class="text-center">
-              <%= f.submit :Create , {:class=>'btn btn-info'}%>
+            <div class="text-center col-md-6 col-sm-12">
+              <%= f.submit :Create , {:class=>'btn btn-success'}%>
+            </div>
+            <div class="text-center col-md-6 col-sm-12">
+              <%= link_to "Back" , users_path , {:class=> 'btn btn-info'}%>
             </div>
         <% end %>
         </div>

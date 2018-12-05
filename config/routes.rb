@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post 'users/authenticate', to: 'users#auth', as:'auth'
   get 'users/logout', to: 'users#logout', as: 'logout'
   root 'users#landing'
+  post '/admin/update', to: 'users#update_admin', as: 'update_admin'
   get '/admin', to: 'users#admin', as: 'admin'
   get 'users/mail_auth', to:'users#mail_confirm'
   resources :users do
